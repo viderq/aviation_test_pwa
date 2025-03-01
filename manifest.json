@@ -1,7 +1,7 @@
 {
   "name": "News",
   "short_name": "News",
-  "start_url": "/checklists_web/index.html",
+  "start_url": "/aviation_test_pwa/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007BFF",
