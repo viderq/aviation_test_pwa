@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <title>Тест-Платформа</title>
+</head>
+<body>
+  <!-- Выдвижное боковое меню -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Режимы</h2>
+      <button class="close-btn" id="closeBtn">&times;</button>
+    </div>
+    <div class="sidebar-buttons">
+      <button class="sidebar-btn" id="answersTestBtn">Тест с ответами</button>
+      <button class="sidebar-btn" id="realTestBtn">Реальное тестирование</button>
+    </div>
+  </div>
+
+  <!-- Основной контейнер -->
+  <div class="container">
+    <!-- Шапка теста -->
+    <div class="test-header">
+      <button class="menu-btn" id="menuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <h2>Тест в Росавиации</h2>
+    </div>
+
+    <!-- Прогресс бар -->
+    <div class="progress-bar">
+      <div class="progress" style="width: 10%"></div>
+    </div>
+
+    <!-- Блок вопроса -->
+    <div class="question-card">
+      <h3 id="questionText">Вопрос 0</h3>
+      <!-- Варианты ответов -->
+      <button class="answer-option" data-correct="false">Ответ 0</button>
+      <button class="answer-option" data-correct="false">Ответ 1</button>
+      <button class="answer-option" data-correct="ture">Ответ 2</button>
+    </div>
+
+    <!-- Кнопки навигации -->
+    <div class="nav-container">
+      <button class="nav-button" id="prevBtn" disabled>Назад</button>
+      <div id="questionCounter">
+          Вопрос <span id="currentQuestion">1</span>/36
+          <br>
+          <button class="nav-button" id="finishBtn" style="display: none;">Закончить</button>
+      </div>
+      <button class="nav-button" id="nextBtn">Далее</button>
+    </div>
+
+  </div>
+</body>
+</html>
