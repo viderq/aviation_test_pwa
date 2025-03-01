@@ -1,0 +1,319 @@
+
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #2c3e50;
+            --primary-color: #3498db;
+            --border-color: #ecf0f1;
+        }
+
+        .dark-theme {
+            --bg-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --primary-color: #2980b9;
+            --border-color: #34495e;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Стили для кнопки бокового меню */
+        .menu-btn {
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          margin-right: 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 24px;
+        }
+
+        .menu-btn span {
+          display: block;
+          margin-left: 5px;
+          width: 25px;
+          height: 3px;
+          background-color: white; /* Цвет линий, соответствует тексту в синем блоке */
+          border-radius: 1px;
+        }
+
+        /* Расположение элементов внутри шапки */
+        .test-header {
+          background: var(--primary-color);
+          color: white;
+          border-radius: 8px;
+          padding: 15px;
+          margin-bottom: 30px;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+
+        /* Сдвигаем заголовок для размещения кнопки слева */
+        .test-header h2 {
+          margin: 0;
+          flex-grow: 1;
+        }
+
+        /* Позиционирование кнопки меню слева */
+        .menu-btn {
+          position: absolute;
+          left: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+
+
+        /* Прогресс бар */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #27ae60;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Блок вопроса */
+        .question-card {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Варианты ответов */
+        .answer-option {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .answer-option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .answer-option.selected {
+            border-color: #27ae60;
+            background-color: rgba(39,174,96,0.1);
+        }
+
+        /* Контейнер для навигации и счётчика */
+        .nav-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 30px;
+        }
+
+
+        /* Кнопки навигации */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .fa-bars {
+            font-size: 25px;
+            color: white;
+        }
+
+        
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .answer-option {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+            /* Стили для выдвижного бокового меню */
+            .sidebar {
+              position: fixed;
+              top: 0;
+              left: -100%; /* Меню изначально скрыто за левой границей */
+              width: 100%;
+              height: 100%;
+              background-color: var(--primary-color); /* Используем синюю тему */
+              color: white;
+              transition: left 0.3s ease;
+              z-index: 1000; /* Меню поверх основного контента */
+              display: flex;
+              flex-direction: column;
+            }
+
+            .sidebar.active {
+              left: 0; /* При наличии класса active меню выезжает */
+            }
+
+            /* Шапка бокового меню */
+            .sidebar-header {
+                display: flex;
+                justify-content: center;  /* Центрируем по горизонтали */
+                align-items: center;      /* Центрируем по вертикали */
+                position: relative;       /* Для абсолютного позиционирования кнопки */
+                height: 60px;             /* Высота заголовка */
+                background: var(--primary-color);
+                color: white;
+                font-size: 15px;
+                font-weight: bold;
+                border-bottom: 1px solid rgba(255,255,255,0.2);
+            }
+
+            .close-btn {
+                position: absolute;
+                right: 15px;              /* Размещаем кнопку справа */
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                font-size: 24px;
+                color: white;
+                cursor: pointer;
+            }
+
+
+            /* Стили для навигации в боковом меню */
+            .sidebar-nav ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+            }
+
+            .sidebar-nav li {
+              border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .sidebar-nav li a {
+              display: block;
+              padding: 15px;
+              color: white;
+              text-decoration: none;
+              transition: background 0.2s;
+            }
+
+            .sidebar-nav li a:hover {
+              background: rgba(255,255,255,0.1);
+            }
+                   /* Стили для блока с кнопками в боковом меню */
+            .sidebar-buttons {
+              display: flex;
+              flex-direction: column;
+              padding: 15px;
+            }
+
+            /* Стили для кнопок бокового меню */
+            .sidebar-btn {
+              padding: 12px;
+              margin-bottom: 10px;
+              border: none;
+              border-radius: 4px;
+              background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */
+              color: white;
+              font-size: 16px;
+              cursor: pointer;
+              transition: background-color 0.2s;
+            }
+
+            .sidebar-btn:hover {
+              background-color: rgba(255, 255, 255, 0.3);
+            }
+
+        /* Подсветка для неверного ответа */
+            .answer-option.false {
+                border-color: #e74c3c;
+                background-color: rgba(231, 76, 60, 0.1);
+            }
+
+            /* Подсветка для правильного ответа */
+            .answer-option.true {
+                border-color: #27ae60;
+                background-color: rgba(39, 174, 96, 0.1);
+            }
+
+                /* Стили для контейнера с вопросом и счётчиком */
+        #questionCounter {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: -10px; /* Добавим отступ снизу, чтобы было место для кнопки */
+        }
+
+        /* Стиль кнопки "Закончить" */
+        #finishBtn {
+            margin-top: 15px; /* Отступ сверху для кнопки */
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            display: inline-block; /* Делаем кнопку блочной, чтобы она была в одном ряду с текстом */
+            text-align: center;
+        }
+
+        #finishBtn:hover {
+            transform: translateY(-2px);
+        }
+
+        #finishBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
