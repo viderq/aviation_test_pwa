@@ -1,6 +1,6 @@
 {
-  "name": "News",
-  "short_name": "News",
+  "name": "Авиа-тест",
+  "short_name": "АТ",
   "start_url": "/aviation_test_pwa/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
