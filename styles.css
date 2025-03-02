@@ -308,7 +308,7 @@
 
                 /* Стили для контейнера с вопросом и счётчиком */
         #questionCounter {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             text-align: center;
             margin-bottom: -10px; /* Добавим отступ снизу, чтобы было место для кнопки */
