@@ -1,18 +1,9 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker зарегистрирован:', reg))
-      .catch(err => console.error('Ошибка регистрации Service Worker:', err));
-  });
-}
-    
-    
-    // Получаем элементы страницы
+// Получаем элементы страницы
 const questionText = document.getElementById("questionText");
 const answersContainer = document.querySelector(".question-card");
-const nextBtn = document.getElementById("nextBtn");
-const prevBtn = document.getElementById("prevBtn");
-const currentQuestionEl = document.getElementById("currentQuestion");
+let nextBtn = document.getElementById("nextBtn");
+let prevBtn = document.getElementById("prevBtn");
+let currentQuestionEl = document.getElementById("currentQuestion");
 const progress = document.querySelector(".progress");
 var mode = 0;
 // Массив для хранения ответов пользователя
@@ -58,314 +49,202 @@ const questions = {
     "Вопрос 36": [{"Ответ A": false}, {"Ответ B": true}, {"Ответ C": false}]
 };
 
-// 📌 Преобразуем объект в массив для работы
+// Преобразуем объект в массив для работы
 const questionKeys = Object.keys(questions);
 const totalQuestions = questionKeys.length;
 
-// 📌 Переменная для отслеживания текущего вопроса
+// Переменные для отслеживания текущего вопроса
 let currentQuestionIndex = 0;
 let selectedAnswer = null;
 
-// 📌 Функция для загрузки текущего вопроса
-function loadQuestion(index) {
-    const questionKey = questionKeys[index]; // Получаем ключ текущего вопроса
-    questionText.textContent = questionKey; // Устанавливаем текст вопроса
-
-    // 📌 Очищаем старые ответы
-    answersContainer.innerHTML = `<h3 id="questionText">${questionKey}</h3>`;
-
-    // 📌 Добавляем новые варианты ответов
-    questions[questionKey].forEach(answerObj => {
-        const [answerText, isCorrect] = Object.entries(answerObj)[0]; // Получаем текст ответа и его правильность
-        const button = document.createElement("button");
-        button.textContent = answerText;
-        button.classList.add("answer-option");
-        button.dataset.correct = isCorrect; // Сохраняем информацию о правильности ответа
-
-
-        button.addEventListener("click", () => {
-        document.querySelectorAll(".answer-option").forEach(btn => btn.classList.remove("selected"));
-        button.classList.add("selected");
-        selectedAnswer = isCorrect;
-        nextBtn.disabled = false;
-
-    // Если ответ правильный, увеличиваем счетчик правильных ответов
-    if (isCorrect) {
-        correctAnswersCount++;
-    }
-});
-
-
-        answersContainer.appendChild(button);
-    });
-
-    // 📌 Обновляем прогресс и номер вопроса
-    currentQuestionEl.textContent = index + 1;
-    progress.style.width = `${((index + 1) / totalQuestions) * 100}%`;
-
-    // 📌 Блокируем кнопку "Назад" на первом вопросе
-    prevBtn.disabled = index === 0;
-    nextBtn.disabled = true;
-}
-
-// 📌 Обработчик кнопки "Далее"
-nextBtn.addEventListener("click", () => {
-    console.log(mode);
-    if (mode == 0){
-        if (selectedAnswer !== null) {
-            // Если текущий вопрос последний, сбрасываем его на первый
-            if (currentQuestionIndex + 1 < totalQuestions) {
-                currentQuestionIndex++;  // Переходим к следующему вопросу
-            } else {
-                currentQuestionIndex = 0;  // Сброс на первый вопрос
-            }
-            loadQuestion(currentQuestionIndex); // Загружаем новый вопрос
-        }
-       }
-});
-
-// 📌 Обработчик кнопки "Назад"
-prevBtn.addEventListener("click", () => {
-    if (mode == 0){
-        if (selectedAnswer !== null) {
-            // Если текущий вопрос первый, сбрасываем его на последний
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;  // Переходим к предыдущему вопросу
-            } else {
-                currentQuestionIndex = totalQuestions - 1;  // Переход к последнему вопросу
-            }
-            loadQuestion(currentQuestionIndex); // Загружаем новый вопрос
-        }
-    }
-});
-
-// 📌 Функция для загрузки текущего вопроса
-function loadQuestion(index) {
-    const questionKey = questionKeys[index];  // Получаем ключ текущего вопроса
-    questionText.textContent = questionKey;  // Устанавливаем текст вопроса
-
-    // 📌 Очищаем старые ответы
-    answersContainer.innerHTML = `<h3 id="questionText">${questionKey}</h3>`;
-
-    // 📌 Добавляем новые варианты ответов
-    questions[questionKey].forEach(answerObj => {
-        const [answerText, isCorrect] = Object.entries(answerObj)[0];  // Получаем текст ответа и его правильность
-        const button = document.createElement("button");
-        button.textContent = answerText;
-        button.classList.add("answer-option");
-        button.dataset.correct = isCorrect;  // Сохраняем информацию о правильности ответа
-
-        button.addEventListener("click", () => {
-            document.querySelectorAll(".answer-option").forEach(btn => btn.classList.remove("selected"));
-            button.classList.add("selected");
-            selectedAnswer = isCorrect;
-            nextBtn.disabled = false;
-        });
-
-        answersContainer.appendChild(button);
-    });
-
-    // 📌 Обновляем прогресс и номер вопроса
-    currentQuestionEl.textContent = index + 1;  // Номер текущего вопроса
-    progress.style.width = `${((index + 1) / totalQuestions) * 100}%`;  // Обновляем прогресс-бар
-
-    // 📌 Блокируем кнопку "Назад" на первом вопросе
-    prevBtn.disabled = index === 0;
-    nextBtn.disabled = true;
-}
-
-
-
-// 📌 Показываем первый вопрос при загрузке страницы
-loadQuestion(currentQuestionIndex);
-
-
-// Логика для бокового меню
+// Логика бокового меню
 const menuBtn = document.getElementById('menuBtn');
 const closeBtn = document.getElementById('closeBtn');
 const sidebar = document.getElementById('sidebar');
 
 menuBtn.addEventListener('click', () => {
-  sidebar.classList.add('active'); // Открываем меню
+  sidebar.classList.add('active');
 });
-
 closeBtn.addEventListener('click', () => {
-  sidebar.classList.remove('active'); // Закрываем меню
+  sidebar.classList.remove('active');
 });
-
-// Если нужно закрывать меню при клике вне его:
 document.addEventListener('click', (e) => {
   if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
     sidebar.classList.remove('active');
   }
 });
 
-// 📌 Функция для обновления прогресса
-function updateProgress(questionNumber) {
-    const progressPercent = ((questionNumber) / totalQuestions) * 100;  // Перерасчет прогресса
-    progress.style.width = `${progressPercent}%`;  // Обновляем ширину прогресс-бара
-    currentQuestion.textContent = questionNumber;  // Обновляем текст с номером вопроса
-}
-
-document.querySelectorAll('.answer-option').forEach(option => {
-    option.addEventListener('click', function () {
-        let isCorrect = this.getAttribute('data-correct') === "true";
-
-        // Убираем выделение со всех ответов
-        document.querySelectorAll('.answer-option').forEach(opt => {
-            opt.classList.remove('selected', 'true', 'false');
-        });
-
-        // Добавляем соответствующий класс к выбранному ответу
-        this.classList.add('selected', isCorrect ? 'true' : 'false');
-    });
-});
-
-document.addEventListener('click', function (event) {
-    if (event.target.classList.contains('answer-option')) {
-        let selectedOption = event.target;
-        let isCorrect = selectedOption.getAttribute('data-correct') === "true";
-
-        // Получаем контейнер текущего вопроса
-        let questionCard = selectedOption.closest('.question-card');
-
-        // Сбрасываем все классы внутри текущего вопроса
-        questionCard.querySelectorAll('.answer-option').forEach(opt => {
-            opt.classList.remove('selected', 'true', 'false');
-        });
-
-        // Добавляем соответствующий класс к выбранному ответу
-        selectedOption.classList.add('selected', isCorrect ? 'true' : 'false');
-    }
-});
-
-// Получаем элементы страницы
-const realTestBtn = document.getElementById("realTestBtn");
-
-// Функция для случайного выбора 14 вопросов
-function getRandomQuestions() {
-    const shuffledQuestions = [...questionKeys];  // Создаем копию массива ключей
-    shuffledQuestions.sort(() => 0.5 - Math.random());  // Перемешиваем вопросы
-    return shuffledQuestions.slice(0, 14);  // Возвращаем первые 14 вопросов
-}
-
-// Объявляем переменную для количества вопросов в режиме "Реальное тестирование"
-const realTestTotal = 14;  // Общее количество вопросов для режима "Реальное тестирование"
-
-function showRandomQuestions() {
-
-    mode = 1
-    console.log(mode);
-
-    // Закрываем меню
-    sidebar.classList.remove('active');
-
-    // Изменяем margin-bottom у questionCounter при нажатии
-    questionCounter.style.marginBottom = '-50px';
-
-    // Обновляем счетчик вопросов для режима "Реальное тестирование"
-    document.getElementById("questionCounter").innerHTML = `
-        Вопрос <span id="currentQuestion">1</span>/${realTestTotal}
-        <br>
-        <button class="nav-button" id="finishBtn">Закончить</button>
-    `;
-
-    // Получаем элемент "Закончить" и вешаем обработчик
-    const finishBtn = document.getElementById("finishBtn");
-    finishBtn.addEventListener("click", () => {
-    // Показываем результат
-        alert(`Тест завершён! Вы правильно ответили на ${correctAnswersCount} из ${realTestTotal} вопросов.`);
-    });
-
-    // Получаем 14 случайных вопросов
-    const randomQuestions = getRandomQuestions();
-
-    // Сохраняем массив случайных вопросов в глобальной переменной
-    window.randomQuestions = randomQuestions;
-
-    // Устанавливаем индекс текущего вопроса
-    window.currentRandomQuestionIndex = 0;
-
-    // Очищаем контейнер для вопросов
-    answersContainer.innerHTML = '';
-
-    // Загружаем первый случайный вопрос
-    loadRandomQuestion(window.currentRandomQuestionIndex);
-}
-
-// Функция для загрузки случайного вопроса
-function loadRandomQuestion(index) {
-    const questionKey = window.randomQuestions[index];  // Получаем ключ текущего случайного вопроса
-    questionText.textContent = questionKey;  // Устанавливаем текст вопроса
-
-    // Очищаем старые ответы
+// Функция загрузки вопроса (стандартный режим)
+function loadQuestion(index) {
+    const questionKey = questionKeys[index];
+    questionText.textContent = questionKey;
     answersContainer.innerHTML = `<h3 id="questionText">${questionKey}</h3>`;
-
-    // Добавляем новые варианты ответов
     questions[questionKey].forEach(answerObj => {
-        const [answerText, isCorrect] = Object.entries(answerObj)[0];  // Получаем текст ответа и его правильность
+        const [answerText, isCorrect] = Object.entries(answerObj)[0];
         const button = document.createElement("button");
         button.textContent = answerText;
         button.classList.add("answer-option");
-        button.dataset.correct = isCorrect;  // Сохраняем информацию о правильности ответа
-
-        button.addEventListener("click", () => {
-            document.querySelectorAll(".answer-option").forEach(btn => btn.classList.remove("selected"));
-            button.classList.add("selected");
-            selectedAnswer = isCorrect;
-            nextBtn.disabled = false;
-
-            // 📌 Сохранение ответа в словарь
-            const questionKey = questionText.textContent; // Текущий вопрос
-            userAnswers[questionKey] = { [answerText]: isCorrect };
-        });
-
-
+        button.dataset.correct = isCorrect;
         answersContainer.appendChild(button);
     });
-
-    // Обновляем прогресс и номер вопроса (используем переменную realTestTotal)
-    document.getElementById("currentQuestion").textContent = index + 1;
-    progress.style.width = `${((index + 1) / realTestTotal) * 100}%`;
-
-    // Блокируем кнопку "Назад" на первом вопросе
+    currentQuestionEl.textContent = index + 1;
+    progress.style.width = `${((index + 1) / totalQuestions) * 100}%`;
     prevBtn.disabled = index === 0;
     nextBtn.disabled = true;
+    selectedAnswer = null;
 }
 
-// Обработчик кнопки "Далее" для случайных вопросов
-nextBtn.addEventListener("click", () => {
-    console.log(mode);
-    if (mode == 1){
-        if (selectedAnswer !== null) {
-            // Переходим к следующему вопросу
+// Функция загрузки вопроса (режим "Реальное тестирование")
+function loadRandomQuestion(index) {
+    const questionKey = window.randomQuestions[index];
+    questionText.textContent = questionKey;
+    answersContainer.innerHTML = `<h3 id="questionText">${questionKey}</h3>`;
+    questions[questionKey].forEach(answerObj => {
+        const [answerText, isCorrect] = Object.entries(answerObj)[0];
+        const button = document.createElement("button");
+        button.textContent = answerText;
+        button.classList.add("answer-option");
+        button.dataset.correct = isCorrect;
+        answersContainer.appendChild(button);
+    });
+    document.getElementById("currentQuestion").textContent = index + 1;
+    progress.style.width = `${((index + 1) / realTestTotal) * 100}%`;
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = true;
+    selectedAnswer = null;
+}
+
+// Загружаем первый вопрос при старте
+loadQuestion(currentQuestionIndex);
+
+// Делегирование выбора ответа
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('answer-option')) {
+        const selectedOption = event.target;
+        const isCorrect = selectedOption.getAttribute('data-correct') === "true";
+        const questionCard = selectedOption.closest('.question-card');
+        if (questionCard) {
+            questionCard.querySelectorAll('.answer-option').forEach(opt => {
+                opt.classList.remove('selected', 'true', 'false', 'grey');
+            });
+        }
+        // Если режим реального тестирования, подсвечиваем серым, иначе зеленым или красным
+        if (mode === 1) {
+            selectedOption.classList.add('selected', 'grey');
+        } else {
+            selectedOption.classList.add('selected', isCorrect ? 'true' : 'false');
+        }
+        selectedAnswer = isCorrect;
+        nextBtn.disabled = false;
+        if (mode === 1) {
+            const currentQuestionText = questionText.textContent;
+            const answerText = selectedOption.textContent;
+            userAnswers[currentQuestionText] = { [answerText]: isCorrect };
+        }
+    }
+});
+
+// Делегирование кнопок "Далее" и "Назад"
+// Для кнопки "Далее" требуем, чтобы ответ был выбран,
+// а для кнопки "Назад" работаем всегда независимо от выбранного ответа.
+document.addEventListener("click", (event) => {
+    if (event.target.id === "nextBtn") {
+        if (mode === 0 && selectedAnswer !== null) {
+            if (currentQuestionIndex + 1 < totalQuestions) {
+                currentQuestionIndex++;
+            } else {
+                currentQuestionIndex = 0;
+            }
+            loadQuestion(currentQuestionIndex);
+        }
+        if (mode === 1 && selectedAnswer !== null) {
             if (window.currentRandomQuestionIndex + 1 < window.randomQuestions.length) {
-                window.currentRandomQuestionIndex++;  // Переходим к следующему вопросу
+                window.currentRandomQuestionIndex++;
             } else {
-                window.currentRandomQuestionIndex = 0;  // Сброс на первый вопрос
+                window.currentRandomQuestionIndex = 0;
             }
-            loadRandomQuestion(window.currentRandomQuestionIndex); // Загружаем новый вопрос
-
+            loadRandomQuestion(window.currentRandomQuestionIndex);
         }
     }
-});
-
-// Обработчик кнопки "Назад" для случайных вопросов
-prevBtn.addEventListener("click", () => {
-    if (mode == 1){
-
-        if (selectedAnswer !== null) {
-            // Переходим к предыдущему вопросу
+    if (event.target.id === "prevBtn") {
+        if (mode === 0) {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+            } else {
+                currentQuestionIndex = totalQuestions - 1;
+            }
+            loadQuestion(currentQuestionIndex);
+        }
+        if (mode === 1) {
             if (window.currentRandomQuestionIndex > 0) {
-                window.currentRandomQuestionIndex--;  // Переходим к предыдущему вопросу
+                window.currentRandomQuestionIndex--;
             } else {
-                window.currentRandomQuestionIndex = window.randomQuestions.length - 1;  // Переход к последнему вопросу
+                window.currentRandomQuestionIndex = window.randomQuestions.length - 1;
             }
-            loadRandomQuestion(window.currentRandomQuestionIndex); // Загружаем новый вопрос
+            loadRandomQuestion(window.currentRandomQuestionIndex);
         }
     }
 });
 
+// Режимы тестирования
+const realTestBtn = document.getElementById("realTestBtn");
+const answersTestBtn = document.getElementById("answersTestBtn");
 
-// Обработчик для кнопки realTestBtn, который запускает режим "Реальное тестирование"
+function getRandomQuestions() {
+    const shuffledQuestions = [...questionKeys];
+    shuffledQuestions.sort(() => 0.5 - Math.random());
+    return shuffledQuestions.slice(0, 14);
+}
+
+const realTestTotal = 14;
+
+function showRandomQuestions() {
+    mode = 1;
+    sidebar.classList.remove('active');
+    const questionCounter = document.getElementById("questionCounter");
+    if (questionCounter) {
+        questionCounter.style.marginBottom = '-50px';
+    }
+    document.getElementById("questionCounter").innerHTML = `
+        Вопрос <span id="currentQuestion">1</span>/<span id="finalQuestion">${realTestTotal}</span>
+        <br>
+        <button class="nav-button finishBtn" id="finishBtn">Закончить</button>
+    `;
+    const randomQuestions = getRandomQuestions();
+    window.randomQuestions = randomQuestions;
+    window.currentRandomQuestionIndex = 0;
+    answersContainer.innerHTML = '';
+    loadRandomQuestion(window.currentRandomQuestionIndex);
+}
+
+document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("finishBtn")) {
+        let correctAnswersCount = 0;
+        Object.values(userAnswers).forEach(answer => {
+            if (Object.values(answer)[0] === true) {
+                correctAnswersCount++;
+            }
+        });
+        alert(`Тест завершён! Вы правильно ответили на ${correctAnswersCount} из ${realTestTotal} вопросов.`);
+    }
+});
+
 realTestBtn.addEventListener("click", showRandomQuestions);
+
+answersTestBtn.addEventListener("click", () => {
+    mode = 0;
+    currentQuestionIndex = 0;
+    loadQuestion(currentQuestionIndex);
+    sidebar.classList.remove('active');
+    document.getElementById("nav-container").innerHTML = `
+      <button class="nav-button" id="prevBtn" disabled>Назад</button>
+      <div id="questionCounter">
+          Вопрос <span id="currentQuestion">1</span>/36
+          <br>
+          <button class="nav-button finishBtn" id="finishBtn" style="display: none;">Закончить</button>
+      </div>
+      <button class="nav-button" id="nextBtn">Далее</button>`;
+    nextBtn = document.getElementById("nextBtn");
+    prevBtn = document.getElementById("prevBtn");
+    currentQuestionEl = document.getElementById("currentQuestion");
+});
