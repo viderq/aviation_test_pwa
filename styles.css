@@ -102,22 +102,23 @@
 
         /* Блок вопроса */
         .question-card {
+            font-size: 18px;
             background: var(--bg-color);
             border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 25px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            height: 350px;
+            height: 500px;
         }
 
         /* Варианты ответов */
         .answer-option {
             display: block;
             width: 100%;
-            height: 55px;
+            height: 80px;
             padding: 15px 20px;
-            margin: 20px 0;
+            margin: 40px 0;
             border: 2px solid var(--border-color);
             border-radius: 8px;
             background: transparent;
@@ -125,6 +126,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: left;
+            /*font-size: 40px;*/
         }
 
         .answer-option:hover {
@@ -142,7 +144,7 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-top: 80px;
+          margin-top: 60px;
         }
 
 
@@ -163,6 +165,7 @@
             color: white;
             cursor: pointer;
             transition: transform 0.2s ease;
+            font-size: 20px;
         }
 
         .nav-button:disabled {
@@ -184,7 +187,7 @@
 
             .answer-option {
                 padding: 12px 15px;
-                font-size: 14px;
+                font-size: 18px;
             }
         }
             /* Стили для выдвижного бокового меню */
@@ -293,7 +296,7 @@
 
                 /* Стили для контейнера с вопросом и счётчиком */
         #questionCounter {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: bold;
             text-align: center;
             margin-bottom: -10px; /* Добавим отступ снизу, чтобы было место для кнопки */
@@ -321,4 +324,10 @@
         #finishBtn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+      .answer-option.grey {
+          background-color: rgba(142, 151, 144, 0.1);
+          border-color: #ccc;
+          color: #000;
         }
